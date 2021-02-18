@@ -1,0 +1,36 @@
+#pragma once
+#ifndef _ENGINE_H_
+#define _ENGINE_H_
+
+#include <iostream>
+#include "SDL.h"
+#include "Internals.h"
+
+#define WIDTH 1024
+#define HEIGHT 768
+using namespace std;
+
+int Run()
+{
+	if (g_running == true)
+		return 1;
+	// Start and run the "engine"
+	if (Init("GAME1007 M1", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT, NULL) == false)
+		return 2;
+	// We passed our initial checks, start the loop!
+	while (g_running == true)
+	{
+		Wake();
+		HandleEvents(); // Input
+		Update();		// Processing
+		Render();		// Output
+		if (g_running == true)
+			Sleep();
+	}
+	Clean();
+	return 0;
+}
+
+#endif
+
+// Reminder: you can ONLY have declarations in headers, not logical code.
