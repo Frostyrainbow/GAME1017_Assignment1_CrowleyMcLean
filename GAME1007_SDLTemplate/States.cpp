@@ -226,6 +226,7 @@ void GameState::Update()
 			Mix_PlayChannel(-1, Engine::Instance().m_death, 0);
 			cout << "Collision!" << endl;
 			StateManager::ChangeState(new EndState);
+			//TODO: Entering EndState breaks game?
 			break;
 		}
 	}
@@ -339,7 +340,7 @@ void PauseState::Enter()
 
 void PauseState::Update()
 {
-	if(Engine::Instance().m_pResumeButton.GetPressed())
+	if(Engine::Instance().m_pResumeButton.GetPressed(Engine::Instance().m_pResumeButton))
 	{
 		Engine::Instance().m_pResumeButton.SetPressed(false);
 		StateManager::PopState();
@@ -380,7 +381,7 @@ void EndState::Enter()
 
 void EndState::Update()
 {
-	if (Engine::Instance().m_pMenuButton.GetPressed())
+	if (Engine::Instance().m_pMenuButton.GetPressed(Engine::Instance().m_pMenuButton))
 	{
 		Engine::Instance().m_pMenuButton.SetPressed(false);		
 		StateManager::ChangeState(new TitleState);
@@ -389,8 +390,11 @@ void EndState::Update()
 
 void EndState::Render()
 {
-	StateManager::GetStates().front()->Render();
+	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 255, 255, 255);
+	SDL_RenderClear(Engine::Instance().GetRenderer());
 	SDL_RenderCopy(Engine::Instance().m_pRenderer, Engine::Instance().m_pMenuButtonTexture, Engine::Instance().m_pMenuButton.GetSrc(), Engine::Instance().m_pMenuButton.GetDst());
+	State::Render();
+	
 }
 
 void EndState::Exit()

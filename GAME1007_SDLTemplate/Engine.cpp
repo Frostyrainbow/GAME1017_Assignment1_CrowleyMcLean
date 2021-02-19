@@ -543,10 +543,10 @@ SDL_Point& Engine::GetMousePos()
 	return s_mousePos;
 }
 
-bool Button::GetPressed()
+bool Button::GetPressed(Button button)
 {
 	const auto mousePos = Engine::GetMousePos();
-	if (SDL_PointInRect(&mousePos, Engine::Instance().m_pResumeButton.GetDst()) && Engine::MousePressed(1))
+	if (SDL_PointInRect(&mousePos, button.GetDst()) && Engine::MousePressed(1))
 	{
 		m_Pressed = true;
 	}

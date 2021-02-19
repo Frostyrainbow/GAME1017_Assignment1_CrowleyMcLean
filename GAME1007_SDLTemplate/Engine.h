@@ -56,7 +56,7 @@ public:
 
 	void Update()
 	{
-		GetPressed();
+		
 	}
 	
 	void SetLoc(SDL_Point loc)
@@ -70,7 +70,7 @@ public:
 		SDL_RenderCopyEx(rend, tex, &m_src, &m_dst, 90.0, NULL, SDL_FLIP_NONE);
 	}
 
-	bool GetPressed();
+	bool GetPressed(Button button);
 
 	void SetPressed(bool pressed)
 	{
