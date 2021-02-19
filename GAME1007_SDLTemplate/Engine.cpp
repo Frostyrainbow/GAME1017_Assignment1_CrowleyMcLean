@@ -414,6 +414,12 @@ int Engine::Run()
 	return 0;
 }
 
+Engine* Engine::Instance()
+{
+	static Engine* instance = new Engine(); //Magic statics. Creating the object
+	return instance;
+}
+
 
 void Engine::Clean()
 {

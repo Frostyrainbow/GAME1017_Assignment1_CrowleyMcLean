@@ -231,6 +231,8 @@ private: // private properties.
 	Mix_Music* m_theme;
 
 private: // private method prototypes.
+	Engine() {} //Prevents instantiantion outside class
+	~Engine() = delete; //Prevents destruction through pointer.
 	int Init(const char* title, int xPos, int yPos, int width, int height, int flags);
 	void Clean();
 	void Wake();
@@ -243,6 +245,7 @@ private: // private method prototypes.
 
 public: // public method prototypes.
 	int Run();
+	static Engine* Instance(); //Static methoid for object access
 };
 
 #endif
