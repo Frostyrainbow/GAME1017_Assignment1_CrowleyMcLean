@@ -62,6 +62,11 @@ void GameState::Update()
 		STMA::ChangeState(new TitleState());// Change to new TitleState
 	}
 
+	else if(Engine::Instance().KeyDown(SDL_SCANCODE_P))
+	{
+		StateManager::PushState(new PauseState());
+	}
+
 	//Scroll the background
 	Engine::Instance().m_bg1.GetDst()->y += Engine::Instance().m_speed/2;
 	Engine::Instance().m_bg2.GetDst()->y += Engine::Instance().m_speed/2;
@@ -314,4 +319,35 @@ void GameState::Exit()
 void GameState::Resume()
 {
 	cout << "Resuming GameState..." << endl;
+}
+
+PauseState::PauseState(){}
+
+void PauseState::Enter()
+{
+	cout << "Pausing Game...\n";
+}
+
+void PauseState::Update()
+{
+	if(Engine::Instance().KeyDown(SDL_SCANCODE_ESCAPE))
+	{
+		StateManager::PopState();
+	}
+}
+
+void PauseState::Render()
+{
+	StateManager::GetStates().front()->Render();
+	//Rendering of Pause Menu
+	SDL_SetRenderDrawBlendMode(Engine::Instance().GetRenderer(), SDL_BLENDMODE_BLEND);
+	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 0, 0, 128);
+	SDL_Rect rect = { 256, 128, 512, 512 };
+	SDL_RenderFillRect(Engine::Instance().GetRenderer(), &rect);
+	State::Render();
+}
+
+void PauseState::Exit()
+{
+	cout << "Exiting Pause State...\n";
 }

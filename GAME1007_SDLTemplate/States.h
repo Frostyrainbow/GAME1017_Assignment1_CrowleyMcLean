@@ -36,4 +36,13 @@ public:
 	virtual void Resume();
 };
 
+class PauseState : public State
+{
+public:
+	PauseState();
+	virtual void Enter();
+	virtual void Update();
+	virtual void Render();
+	virtual void Exit();
+};
 #endif
