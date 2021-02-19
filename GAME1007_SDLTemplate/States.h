@@ -46,4 +46,14 @@ public:
 	virtual void Render();
 	virtual void Exit();
 };
+
+class EndState : public State
+{
+public:
+	EndState();
+	virtual void Enter();
+	virtual void Update();
+	virtual void Render();
+	virtual void Exit();
+};
 #endif
