@@ -15,5 +15,5 @@
 
 int main(int argc, char* argv[])
 {
-	return Engine::Instance()->Run();
+	return Engine::Instance().Run();
 }

@@ -196,7 +196,7 @@ public:
 
 class Engine
 {
-private: // private properties.
+public: // private properties.
 	bool m_running = false;
 	Uint32 m_start, m_end, m_delta, m_fps;
 	const Uint8* m_keystates;
@@ -232,12 +232,11 @@ private: // private properties.
 
 private: // private method prototypes.
 	Engine() {} //Prevents instantiantion outside class
-	~Engine() = delete; //Prevents destruction through pointer.
+	//~Engine() = delete; //Prevents destruction through pointer.
 	int Init(const char* title, int xPos, int yPos, int width, int height, int flags);
 	void Clean();
 	void Wake();
 	void HandleEvents();
-	bool KeyDown(SDL_Scancode c);
 	void Update();
 	void Render();
 	void Sleep();
@@ -245,7 +244,9 @@ private: // private method prototypes.
 
 public: // public method prototypes.
 	int Run();
-	static Engine* Instance(); //Static methoid for object access
+	bool KeyDown(SDL_Scancode c);
+	static Engine& Instance(); //Static methoid for object access
+	SDL_Renderer* GetRenderer() { return m_pRenderer; }
 };
 
 #endif
