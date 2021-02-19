@@ -192,18 +192,18 @@ void Engine::HandleEvents()
 		case SDL_QUIT:
 			m_running = false;
 			break;
-		case SDL_KEYUP:
-			switch (event.key.keysym.sym)
-			{
-				case ' ':
+		//case SDL_KEYUP:
+		//	switch (event.key.keysym.sym)
+		//	{
+		//		case ' ':
 
-					//Spawn bullet
-					m_bullets.push_back(new Bullet({ m_player->GetDst()->x + 55, m_player->GetDst()->y - 50 }));
-					
-					
-					Mix_PlayChannel(-1, m_p_tank_fire, 0); //-1 channel is first availiable
-					break;
-			}
+		//			//Spawn bullet
+		//			m_bullets.push_back(new Bullet({ m_player->GetDst()->x + 55, m_player->GetDst()->y - 50 }));
+		//			
+		//			
+		//			Mix_PlayChannel(-1, m_p_tank_fire, 0); //-1 channel is first availiable
+		//			break;
+		//	}
 			break;
 		}
 	}
@@ -223,6 +223,9 @@ bool Engine::KeyDown(SDL_Scancode c)
 		return false;
 	}
 }
+
+
+
 
 void Engine::Update()
 {

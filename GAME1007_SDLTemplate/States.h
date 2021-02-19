@@ -34,6 +34,7 @@ public:
 	virtual void Render();
 	virtual void Exit();
 	virtual void Resume();
+	int m_delta = 20;
 };
 
 class PauseState : public State

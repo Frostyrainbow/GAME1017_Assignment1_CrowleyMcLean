@@ -57,6 +57,7 @@ void GameState::Enter()
 
 void GameState::Update()
 {
+	m_delta++;
 	if (Engine::Instance().KeyDown(SDL_SCANCODE_X))
 	{
 		STMA::ChangeState(new TitleState());// Change to new TitleState
@@ -93,6 +94,13 @@ void GameState::Update()
 	else if (Engine::Instance().KeyDown(SDL_SCANCODE_D) && Engine::Instance().m_player->GetDst()->x < WIDTH - Engine::Instance().m_player->GetDst()->w)
 	{
 		Engine::Instance().m_player->GetDst()->x += Engine::Instance().m_speed;
+	}
+
+	if(Engine::Instance().KeyDown(SDL_SCANCODE_SPACE) && m_delta > 20)
+	{
+		Engine::Instance().m_bullets.push_back(new Bullet({ Engine::Instance().m_player->GetDst()->x + 55, Engine::Instance().m_player->GetDst()->y - 50 }));
+		Mix_PlayChannel(-1, Engine::Instance().m_p_tank_fire, 0); //-1 channel is first availiable
+		m_delta = 0;
 	}
 
 	for (int i = 0; i < Engine::Instance().m_bullets.size(); i++)
@@ -330,7 +338,7 @@ void PauseState::Enter()
 
 void PauseState::Update()
 {
-	if(Engine::Instance().KeyDown(SDL_SCANCODE_ESCAPE))
+	if(Engine::Instance().KeyDown(SDL_SCANCODE_R))
 	{
 		StateManager::PopState();
 	}
