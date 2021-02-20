@@ -67,7 +67,7 @@ public:
 
 	void Render(SDL_Renderer* rend, SDL_Texture* tex)
 	{
-		SDL_RenderCopyEx(rend, tex, &m_src, &m_dst, 90.0, NULL, SDL_FLIP_NONE);
+		SDL_RenderCopyEx(rend, tex, &m_src, &m_dst, 0, NULL, SDL_FLIP_NONE);
 	}
 
 	bool GetPressed(Button button);
@@ -256,7 +256,8 @@ public: // private properties.
 	SDL_Texture* m_pMissileTexture; //enemy bullets
 	SDL_Texture* m_pRock; //Rock
 	SDL_Texture* m_pResumeButtonTexture; // Resume button
-	SDL_Texture* m_pMenuButtonTexture;
+	SDL_Texture* m_pMenuButtonTexture; //Main Menu button in End State
+	SDL_Texture* m_pStartButtonTexture; //Start Button in Title
 
 	Sprite* m_player;
 	Sprite m_bg1, m_bg2;
@@ -271,6 +272,7 @@ public: // private properties.
 	vector<Rock*> m_rocks;
 	Button m_pResumeButton;
 	Button m_pMenuButton;
+	Button m_pStartButton;
 	//Sound effects
 	Mix_Chunk* m_p_tank_fire;
 	Mix_Chunk* m_e_plane_fire;
@@ -281,10 +283,10 @@ public: // private properties.
 	Mix_Music* m_theme;
 
 	
-	static SDL_Point s_mousePos;
-	static Uint32 s_mouseCurr;
-	static Uint32 s_mouseLast;
-	SDL_Cursor* s_cursor;
+	static SDL_Point m_mousePos;
+	static Uint32 m_mouseCurr;
+	static Uint32 m_mouseLast;
+	SDL_Cursor* m_cursor;
 
 private: // private method prototypes.
 	Engine() {} //Prevents instantiantion outside class

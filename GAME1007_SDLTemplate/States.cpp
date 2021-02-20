@@ -23,6 +23,11 @@ void TitleState::Update()
 {
 	if (Engine::Instance().KeyDown(SDL_SCANCODE_N))
 		STMA::ChangeState(new GameState());// Change to new GameState
+	if (Engine::Instance().m_pStartButton.GetPressed(Engine::Instance().m_pStartButton))
+	{
+		Engine::Instance().m_pStartButton.SetPressed(false);
+		StateManager::ChangeState(new GameState);
+	}
 }
 
 void TitleState::Render()
@@ -30,6 +35,7 @@ void TitleState::Render()
 	
 	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 0, 255, 255);
 	SDL_RenderClear(Engine::Instance().GetRenderer());
+	SDL_RenderCopy(Engine::Instance().m_pRenderer, Engine::Instance().m_pStartButtonTexture, Engine::Instance().m_pStartButton.GetSrc(), Engine::Instance().m_pStartButton.GetDst());
 	State::Render();
 }
 
@@ -49,7 +55,7 @@ void GameState::Enter()
 {
 	
 	Mix_PlayMusic(Engine::Instance().m_theme, -1); // 0-n for #number of loops, or -1 for infinite looping
-	Mix_VolumeMusic(16); //0-128
+	Mix_VolumeMusic(2); //0-128
 	Mix_VolumeChunk(Engine::Instance().m_e_plane_fire, 8);
 	Mix_VolumeChunk(Engine::Instance().m_p_tank_fire, 8);
 	Mix_VolumeChunk(Engine::Instance().m_death, 13);
@@ -60,7 +66,7 @@ void GameState::Update()
 	m_delta++;
 	if (Engine::Instance().KeyDown(SDL_SCANCODE_X))
 	{
-		STMA::ChangeState(new TitleState());// Change to new TitleState
+		StateManager::ChangeState(new TitleState());// Change to new TitleState
 	}
 
 	else if(Engine::Instance().KeyDown(SDL_SCANCODE_P))
@@ -286,15 +292,10 @@ void GameState::Update()
 }
 
 void GameState::Render()
-{
-	//cout << "Rendering GameState..." << endl;
-	
+{		
 	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 128, 255, 255);
 	SDL_RenderClear(Engine::Instance().m_pRenderer);
 	//Any drawing here...
-	
-	
-	
 	SDL_RenderCopy(Engine::Instance().m_pRenderer, Engine::Instance().m_pBGTexture, Engine::Instance().m_bg1.GetSrc(), Engine::Instance().m_bg1.GetDst());
 	SDL_RenderCopy(Engine::Instance().m_pRenderer, Engine::Instance().m_pBGTexture, Engine::Instance().m_bg2.GetSrc(), Engine::Instance().m_bg2.GetDst());
 	SDL_RenderCopyEx(Engine::Instance().m_pRenderer, Engine::Instance().m_pTexture, Engine::Instance().m_player->GetSrc(), Engine::Instance().m_player->GetDst(), 180.0, NULL, SDL_FLIP_NONE);
@@ -316,9 +317,8 @@ void GameState::Render()
 		Engine::Instance().m_eBullets[i]->Render(Engine::Instance().m_pRenderer, Engine::Instance().m_pMissileTexture);
 	}
 	SDL_RenderPresent(Engine::Instance().m_pRenderer); // Flip buffers - send data to window.
-	State::Render();
-	
-	
+	if(dynamic_cast<GameState*>(StateManager::GetStates().back()))
+		State::Render();
 }
 
 void GameState::Exit()
@@ -354,15 +354,15 @@ void PauseState::Update()
 
 void PauseState::Render()
 {
+	SDL_RenderClear(Engine::Instance().m_pRenderer);
+	//Rendering GameState
 	StateManager::GetStates().front()->Render();
 	//Rendering of Pause Menu
 	SDL_SetRenderDrawBlendMode(Engine::Instance().GetRenderer(), SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 0, 0, 128);
 	SDL_Rect rect = { 256, 128, 512, 512 };
 	SDL_RenderFillRect(Engine::Instance().GetRenderer(), &rect);
-	SDL_RenderCopy(Engine::Instance().m_pRenderer, Engine::Instance().m_pResumeButtonTexture, Engine::Instance().m_pResumeButton.GetSrc(), Engine::Instance().m_pResumeButton.GetDst());
-	//SDL_RenderClear(Engine::Instance().m_pRenderer);
-	
+	Engine::Instance().m_pResumeButton.Render(Engine::Instance().m_pRenderer, Engine::Instance().m_pResumeButtonTexture);
 	State::Render();
 }
 

@@ -118,6 +118,7 @@ int Engine::Init(const char* title, int xPos, int yPos, int width, int height, i
 					m_pRock = IMG_LoadTexture(m_pRenderer, "Img/rock.png");
 					m_pResumeButtonTexture = IMG_LoadTexture(m_pRenderer, "Img/ResumeButton.png");
 					m_pMenuButtonTexture = IMG_LoadTexture(m_pRenderer, "Img/MenuButton.png");
+					m_pStartButtonTexture = IMG_LoadTexture(m_pRenderer, "Img/StartButton.png");
 					
 				}
 				else
@@ -148,13 +149,14 @@ int Engine::Init(const char* title, int xPos, int yPos, int width, int height, i
 	m_fps = (Uint32)round(1.0 / (double)FPS * 1000); // Converts FPS into milliseconds, e.g. 16.67
 	m_keystates = SDL_GetKeyboardState(nullptr);
 	//mouse init
-	s_mouseCurr = SDL_GetMouseState(&s_mousePos.x, &s_mousePos.y);
-	s_mouseLast = s_mouseCurr;
+	m_mouseCurr = SDL_GetMouseState(&m_mousePos.x, &m_mousePos.y);
+	m_mouseLast = m_mouseCurr;
 	
 	m_player = new Sprite;
 	m_player->SetRekts ( {0, 0, 132, 254}, {512, 384, 100, 122} ); 
 	m_pResumeButton.SetRekts({ 0,0,189,58 }, { 420, 300, 189, 58 });
 	m_pMenuButton.SetRekts({ 0,0,189,58 }, { 420, 200, 189, 58 });
+	m_pStartButton.SetRekts({ 0,0,189,58 }, { 420, 400, 189, 58 });
 	m_bg1.SetRekts( {0, 0, WIDTH, HEIGHT}, {0, 0, WIDTH, HEIGHT} );
 	m_bg2.SetRekts( {0, 0, WIDTH, HEIGHT}, {0, -HEIGHT, WIDTH, HEIGHT} );
 	for (int i = 0; i < m_bullets.size(); i++)
@@ -194,7 +196,7 @@ void Engine::HandleEvents()
 {
 	SDL_Event event;
 
-	s_mouseLast = s_mouseCurr;
+	m_mouseLast = m_mouseCurr;
 	while (SDL_PollEvent(&event))
 	{
 		switch (event.type)
@@ -214,11 +216,11 @@ void Engine::HandleEvents()
 		//			Mix_PlayChannel(-1, m_p_tank_fire, 0); //-1 channel is first availiable
 		//			break;
 		//	}
-			break;
+			//break;
 		}
 	}
 
-	s_mouseCurr = SDL_GetMouseState(&s_mousePos.x, &s_mousePos.y);
+	m_mouseCurr = SDL_GetMouseState(&m_mousePos.x, &m_mousePos.y);
 }
 
 bool Engine::KeyDown(SDL_Scancode c)
@@ -534,13 +536,13 @@ Engine& Engine::Instance()
 
 bool Engine::MousePressed(const int b)
 {
-	return ((s_mouseCurr & SDL_BUTTON(b)) > (s_mouseLast & SDL_BUTTON(b)));
+	return ((m_mouseCurr & SDL_BUTTON(b)) > (m_mouseLast & SDL_BUTTON(b)));
 }
 
 
 SDL_Point& Engine::GetMousePos()
 {
-	return s_mousePos;
+	return m_mousePos;
 }
 
 bool Button::GetPressed(Button button)
@@ -604,9 +606,9 @@ void Engine::Clean()
 }
 
 
-Uint32 Engine::s_mouseCurr;
-Uint32 Engine::s_mouseLast;
-SDL_Point Engine::s_mousePos;
+Uint32 Engine::m_mouseCurr;
+Uint32 Engine::m_mouseLast;
+SDL_Point Engine::m_mousePos;
 
 
 

@@ -162,6 +162,7 @@
     <Image Include="Img\plane.png" />
     <Image Include="Img\ResumeButton.png" />
     <Image Include="Img\rock.png" />
+    <Image Include="Img\StartButton.png" />
     <Image Include="Img\tank.png" />
     <Image Include="Img\tankround.png" />
   </ItemGroup>
