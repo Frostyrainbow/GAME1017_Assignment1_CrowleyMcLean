@@ -282,7 +282,7 @@ void GameState::Update()
 	{
 		if (SDL_HasIntersection(Engine::Instance().m_rocks[i]->GetDst(), Engine::Instance().m_player->GetDst()))
 		{
-			delete Engine::Instance().m_player;
+			//delete Engine::Instance().m_player;
 			Mix_PlayChannel(-1, Engine::Instance().m_death, 0);
 			StateManager::ChangeState(new EndState);
 			cout << "Collision!" << endl;
@@ -325,7 +325,35 @@ void GameState::Render()
 
 void GameState::Exit()
 {
-	
+	//Clean the screen
+	for (int i = 0; i < Engine::Instance().m_bullets.size(); i++)
+	{
+		delete Engine::Instance().m_bullets[i];
+		Engine::Instance().m_bullets[i] = nullptr;
+	}
+	Engine::Instance().m_bullets.clear();
+	Engine::Instance().m_bullets.shrink_to_fit();
+	for (int i = 0; i < Engine::Instance().m_enemys.size(); i++)
+	{
+		delete Engine::Instance().m_enemys[i];
+		Engine::Instance().m_enemys[i] = nullptr;
+	}
+	Engine::Instance().m_enemys.clear();
+	Engine::Instance().m_enemys.shrink_to_fit();
+	for (int i = 0; i < Engine::Instance().m_eBullets.size(); i++)
+	{
+		delete Engine::Instance().m_eBullets[i];
+		Engine::Instance().m_eBullets[i] = nullptr;
+	}
+	Engine::Instance().m_eBullets.clear();
+	Engine::Instance().m_eBullets.shrink_to_fit();
+	for (int i = 0; i < Engine::Instance().m_rocks.size(); i++)
+	{
+		delete Engine::Instance().m_rocks[i];
+		Engine::Instance().m_rocks[i] = nullptr;
+	}
+	Engine::Instance().m_rocks.clear();
+	Engine::Instance().m_rocks.shrink_to_fit();
 	cout << "Exiting GameState..." << endl;
 }
 
