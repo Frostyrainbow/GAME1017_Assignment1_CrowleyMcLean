@@ -284,6 +284,7 @@ void GameState::Update()
 		{
 			delete Engine::Instance().m_player;
 			Mix_PlayChannel(-1, Engine::Instance().m_death, 0);
+			StateManager::ChangeState(new EndState);
 			cout << "Collision!" << endl;
 			break;
 		}
@@ -324,6 +325,7 @@ void GameState::Render()
 
 void GameState::Exit()
 {
+	
 	cout << "Exiting GameState..." << endl;
 }
 
