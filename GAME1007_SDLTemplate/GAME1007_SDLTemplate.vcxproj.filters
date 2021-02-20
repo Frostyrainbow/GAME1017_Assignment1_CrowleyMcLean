@@ -38,6 +38,18 @@
     <ClInclude Include="StateManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Img\desert.jpg">
@@ -56,6 +68,15 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Img\rock.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Img\ResumeButton.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Img\MenuButton.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Img\StartButton.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

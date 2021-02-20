@@ -34,6 +34,26 @@ public:
 	virtual void Render();
 	virtual void Exit();
 	virtual void Resume();
+	int m_delta = 20;
 };
 
+class PauseState : public State
+{
+public:
+	PauseState();
+	virtual void Enter();
+	virtual void Update();
+	virtual void Render();
+	virtual void Exit();
+};
+
+class EndState : public State
+{
+public:
+	EndState();
+	virtual void Enter();
+	virtual void Update();
+	virtual void Render();
+	virtual void Exit();
+};
 #endif

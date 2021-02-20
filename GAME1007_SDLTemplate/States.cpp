@@ -23,6 +23,11 @@ void TitleState::Update()
 {
 	if (Engine::Instance().KeyDown(SDL_SCANCODE_N))
 		STMA::ChangeState(new GameState());// Change to new GameState
+	if (Engine::Instance().m_pStartButton.GetPressed(Engine::Instance().m_pStartButton))
+	{
+		Engine::Instance().m_pStartButton.SetPressed(false);
+		StateManager::ChangeState(new GameState);
+	}
 }
 
 void TitleState::Render()
@@ -30,6 +35,7 @@ void TitleState::Render()
 	
 	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 0, 255, 255);
 	SDL_RenderClear(Engine::Instance().GetRenderer());
+	SDL_RenderCopy(Engine::Instance().m_pRenderer, Engine::Instance().m_pStartButtonTexture, Engine::Instance().m_pStartButton.GetSrc(), Engine::Instance().m_pStartButton.GetDst());
 	State::Render();
 }
 
@@ -49,7 +55,7 @@ void GameState::Enter()
 {
 	
 	Mix_PlayMusic(Engine::Instance().m_theme, -1); // 0-n for #number of loops, or -1 for infinite looping
-	Mix_VolumeMusic(16); //0-128
+	Mix_VolumeMusic(2); //0-128
 	Mix_VolumeChunk(Engine::Instance().m_e_plane_fire, 8);
 	Mix_VolumeChunk(Engine::Instance().m_p_tank_fire, 8);
 	Mix_VolumeChunk(Engine::Instance().m_death, 13);
@@ -57,9 +63,15 @@ void GameState::Enter()
 
 void GameState::Update()
 {
+	m_delta++;
 	if (Engine::Instance().KeyDown(SDL_SCANCODE_X))
 	{
-		STMA::ChangeState(new TitleState());// Change to new TitleState
+		StateManager::ChangeState(new TitleState());// Change to new TitleState
+	}
+
+	else if(Engine::Instance().KeyDown(SDL_SCANCODE_P))
+	{
+		StateManager::PushState(new PauseState());
 	}
 
 	//Scroll the background
@@ -88,6 +100,13 @@ void GameState::Update()
 	else if (Engine::Instance().KeyDown(SDL_SCANCODE_D) && Engine::Instance().m_player->GetDst()->x < WIDTH - Engine::Instance().m_player->GetDst()->w)
 	{
 		Engine::Instance().m_player->GetDst()->x += Engine::Instance().m_speed;
+	}
+
+	if(Engine::Instance().KeyDown(SDL_SCANCODE_SPACE) && m_delta > 20)
+	{
+		Engine::Instance().m_bullets.push_back(new Bullet({ Engine::Instance().m_player->GetDst()->x + 55, Engine::Instance().m_player->GetDst()->y - 50 }));
+		Mix_PlayChannel(-1, Engine::Instance().m_p_tank_fire, 0); //-1 channel is first availiable
+		m_delta = 0;
 	}
 
 	for (int i = 0; i < Engine::Instance().m_bullets.size(); i++)
@@ -209,9 +228,11 @@ void GameState::Update()
 			Engine::Instance().m_eBullets[i] = nullptr;
 			Engine::Instance().m_eBullets.erase(Engine::Instance().m_eBullets.begin() + i);
 			Engine::Instance().m_eBullets.shrink_to_fit();
-			delete Engine::Instance().m_player;
+			//delete Engine::Instance().m_player;
 			Mix_PlayChannel(-1, Engine::Instance().m_death, 0);
 			cout << "Collision!" << endl;
+			StateManager::ChangeState(new EndState);
+			//TODO: Entering EndState breaks game?
 			break;
 		}
 	}
@@ -271,15 +292,10 @@ void GameState::Update()
 }
 
 void GameState::Render()
-{
-	//cout << "Rendering GameState..." << endl;
-	
+{		
 	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 128, 255, 255);
 	SDL_RenderClear(Engine::Instance().m_pRenderer);
 	//Any drawing here...
-	
-	
-	
 	SDL_RenderCopy(Engine::Instance().m_pRenderer, Engine::Instance().m_pBGTexture, Engine::Instance().m_bg1.GetSrc(), Engine::Instance().m_bg1.GetDst());
 	SDL_RenderCopy(Engine::Instance().m_pRenderer, Engine::Instance().m_pBGTexture, Engine::Instance().m_bg2.GetSrc(), Engine::Instance().m_bg2.GetDst());
 	SDL_RenderCopyEx(Engine::Instance().m_pRenderer, Engine::Instance().m_pTexture, Engine::Instance().m_player->GetSrc(), Engine::Instance().m_player->GetDst(), 180.0, NULL, SDL_FLIP_NONE);
@@ -301,9 +317,8 @@ void GameState::Render()
 		Engine::Instance().m_eBullets[i]->Render(Engine::Instance().m_pRenderer, Engine::Instance().m_pMissileTexture);
 	}
 	SDL_RenderPresent(Engine::Instance().m_pRenderer); // Flip buffers - send data to window.
-	State::Render();
-	
-	
+	if(dynamic_cast<GameState*>(StateManager::GetStates().back()))
+		State::Render();
 }
 
 void GameState::Exit()
@@ -314,4 +329,75 @@ void GameState::Exit()
 void GameState::Resume()
 {
 	cout << "Resuming GameState..." << endl;
+}
+
+PauseState::PauseState(){}
+
+void PauseState::Enter()
+{
+	cout << "Pausing Game...\n";
+}
+
+void PauseState::Update()
+{
+	if(Engine::Instance().m_pResumeButton.GetPressed(Engine::Instance().m_pResumeButton))
+	{
+		Engine::Instance().m_pResumeButton.SetPressed(false);
+		StateManager::PopState();
+	}
+	if(Engine::Instance().KeyDown(SDL_SCANCODE_R))
+	{
+		StateManager::PopState();
+	}
+	
+}
+
+void PauseState::Render()
+{
+	SDL_RenderClear(Engine::Instance().m_pRenderer);
+	//Rendering GameState
+	StateManager::GetStates().front()->Render();
+	//Rendering of Pause Menu
+	SDL_SetRenderDrawBlendMode(Engine::Instance().GetRenderer(), SDL_BLENDMODE_BLEND);
+	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 0, 0, 128);
+	SDL_Rect rect = { 256, 128, 512, 512 };
+	SDL_RenderFillRect(Engine::Instance().GetRenderer(), &rect);
+	Engine::Instance().m_pResumeButton.Render(Engine::Instance().m_pRenderer, Engine::Instance().m_pResumeButtonTexture);
+	State::Render();
+}
+
+void PauseState::Exit()
+{
+	cout << "Exiting Pause State...\n";
+}
+
+
+EndState::EndState(){}
+
+void EndState::Enter()
+{
+	cout << "Entering End State...\n";
+}
+
+void EndState::Update()
+{
+	if (Engine::Instance().m_pMenuButton.GetPressed(Engine::Instance().m_pMenuButton))
+	{
+		Engine::Instance().m_pMenuButton.SetPressed(false);		
+		StateManager::ChangeState(new TitleState);
+	}
+}
+
+void EndState::Render()
+{
+	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 255, 255, 255);
+	SDL_RenderClear(Engine::Instance().GetRenderer());
+	SDL_RenderCopy(Engine::Instance().m_pRenderer, Engine::Instance().m_pMenuButtonTexture, Engine::Instance().m_pMenuButton.GetSrc(), Engine::Instance().m_pMenuButton.GetDst());
+	State::Render();
+	
+}
+
+void EndState::Exit()
+{
+	cout << "Exiting End State...\n";
 }

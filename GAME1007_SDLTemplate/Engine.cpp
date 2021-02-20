@@ -116,6 +116,9 @@ int Engine::Init(const char* title, int xPos, int yPos, int width, int height, i
 					m_pEnemyTexture = IMG_LoadTexture(m_pRenderer, "Img/plane.png");
 					m_pMissileTexture = IMG_LoadTexture(m_pRenderer, "Img/missile.png");
 					m_pRock = IMG_LoadTexture(m_pRenderer, "Img/rock.png");
+					m_pResumeButtonTexture = IMG_LoadTexture(m_pRenderer, "Img/ResumeButton.png");
+					m_pMenuButtonTexture = IMG_LoadTexture(m_pRenderer, "Img/MenuButton.png");
+					m_pStartButtonTexture = IMG_LoadTexture(m_pRenderer, "Img/StartButton.png");
 					
 				}
 				else
@@ -145,8 +148,15 @@ int Engine::Init(const char* title, int xPos, int yPos, int width, int height, i
 	else return false; // initalization failed.
 	m_fps = (Uint32)round(1.0 / (double)FPS * 1000); // Converts FPS into milliseconds, e.g. 16.67
 	m_keystates = SDL_GetKeyboardState(nullptr);
+	//mouse init
+	m_mouseCurr = SDL_GetMouseState(&m_mousePos.x, &m_mousePos.y);
+	m_mouseLast = m_mouseCurr;
+	
 	m_player = new Sprite;
-	m_player->SetRekts ( {0, 0, 132, 254}, {512, 384, 100, 122} ); //First {} is the src rect and the second {} is the dest rect
+	m_player->SetRekts ( {0, 0, 132, 254}, {512, 384, 100, 122} ); 
+	m_pResumeButton.SetRekts({ 0,0,189,58 }, { 420, 300, 189, 58 });
+	m_pMenuButton.SetRekts({ 0,0,189,58 }, { 420, 200, 189, 58 });
+	m_pStartButton.SetRekts({ 0,0,189,58 }, { 420, 400, 189, 58 });
 	m_bg1.SetRekts( {0, 0, WIDTH, HEIGHT}, {0, 0, WIDTH, HEIGHT} );
 	m_bg2.SetRekts( {0, 0, WIDTH, HEIGHT}, {0, -HEIGHT, WIDTH, HEIGHT} );
 	for (int i = 0; i < m_bullets.size(); i++)
@@ -185,6 +195,8 @@ void Engine::Wake()
 void Engine::HandleEvents()
 {
 	SDL_Event event;
+
+	m_mouseLast = m_mouseCurr;
 	while (SDL_PollEvent(&event))
 	{
 		switch (event.type)
@@ -192,21 +204,23 @@ void Engine::HandleEvents()
 		case SDL_QUIT:
 			m_running = false;
 			break;
-		case SDL_KEYUP:
-			switch (event.key.keysym.sym)
-			{
-				case ' ':
+		//case SDL_KEYUP:
+		//	switch (event.key.keysym.sym)
+		//	{
+		//		case ' ':
 
-					//Spawn bullet
-					m_bullets.push_back(new Bullet({ m_player->GetDst()->x + 55, m_player->GetDst()->y - 50 }));
-					
-					
-					Mix_PlayChannel(-1, m_p_tank_fire, 0); //-1 channel is first availiable
-					break;
-			}
-			break;
+		//			//Spawn bullet
+		//			m_bullets.push_back(new Bullet({ m_player->GetDst()->x + 55, m_player->GetDst()->y - 50 }));
+		//			
+		//			
+		//			Mix_PlayChannel(-1, m_p_tank_fire, 0); //-1 channel is first availiable
+		//			break;
+		//	}
+			//break;
 		}
 	}
+
+	m_mouseCurr = SDL_GetMouseState(&m_mousePos.x, &m_mousePos.y);
 }
 
 bool Engine::KeyDown(SDL_Scancode c)
@@ -223,6 +237,9 @@ bool Engine::KeyDown(SDL_Scancode c)
 		return false;
 	}
 }
+
+
+
 
 void Engine::Update()
 {
@@ -515,6 +532,31 @@ Engine& Engine::Instance()
 	return instance;
 }
 
+
+
+bool Engine::MousePressed(const int b)
+{
+	return ((m_mouseCurr & SDL_BUTTON(b)) > (m_mouseLast & SDL_BUTTON(b)));
+}
+
+
+SDL_Point& Engine::GetMousePos()
+{
+	return m_mousePos;
+}
+
+bool Button::GetPressed(Button button)
+{
+	const auto mousePos = Engine::GetMousePos();
+	if (SDL_PointInRect(&mousePos, button.GetDst()) && Engine::MousePressed(1))
+	{
+		m_Pressed = true;
+	}
+	return m_Pressed;
+}
+
+
+
 void Engine::Clean()
 {
 	cout << "Cleaning engine..." << endl;
@@ -562,5 +604,11 @@ void Engine::Clean()
 	IMG_Quit();
 	SDL_Quit();
 }
+
+
+Uint32 Engine::m_mouseCurr;
+Uint32 Engine::m_mouseLast;
+SDL_Point Engine::m_mousePos;
+
 
 

@@ -36,6 +36,51 @@ public:
 	}
 };
 
+class Button : public Sprite
+{
+public:
+	Button(){}
+	Button(SDL_Rect spawnLoc)
+	{
+		this->m_dst.x = spawnLoc.x; 
+		this->m_dst.y = spawnLoc.y;
+		this->m_dst.w = 189;
+		this->m_dst.h = 58;
+		m_src = { 0, 0, 189, 58 };
+	}
+
+	~Button()
+	{
+		
+	}
+
+	void Update()
+	{
+		
+	}
+	
+	void SetLoc(SDL_Point loc)
+	{
+		m_dst.x = loc.x;
+		m_dst.y = loc.y;
+	}
+
+	void Render(SDL_Renderer* rend, SDL_Texture* tex)
+	{
+		SDL_RenderCopyEx(rend, tex, &m_src, &m_dst, 0, NULL, SDL_FLIP_NONE);
+	}
+
+	bool GetPressed(Button button);
+
+	void SetPressed(bool pressed)
+	{
+		m_Pressed = pressed;
+	}
+	
+private:
+	bool m_Pressed;
+};
+
 class Bullet : public Sprite
 {
 private:
@@ -73,6 +118,8 @@ public:
 		SDL_RenderFillRect(rend, &m_dst);*/
 		SDL_RenderCopy(rend, tex, &m_src, &m_dst);
 	}
+
+	
 	
 };
 
@@ -208,6 +255,9 @@ public: // private properties.
 	SDL_Texture* m_pEnemyTexture; //Enemy texture
 	SDL_Texture* m_pMissileTexture; //enemy bullets
 	SDL_Texture* m_pRock; //Rock
+	SDL_Texture* m_pResumeButtonTexture; // Resume button
+	SDL_Texture* m_pMenuButtonTexture; //Main Menu button in End State
+	SDL_Texture* m_pStartButtonTexture; //Start Button in Title
 
 	Sprite* m_player;
 	Sprite m_bg1, m_bg2;
@@ -220,7 +270,9 @@ public: // private properties.
 	vector<eBullet*> m_eBullets;
 	vector<Enemy*> m_enemys;
 	vector<Rock*> m_rocks;
-
+	Button m_pResumeButton;
+	Button m_pMenuButton;
+	Button m_pStartButton;
 	//Sound effects
 	Mix_Chunk* m_p_tank_fire;
 	Mix_Chunk* m_e_plane_fire;
@@ -229,6 +281,12 @@ public: // private properties.
 
 	//Music tracks
 	Mix_Music* m_theme;
+
+	
+	static SDL_Point m_mousePos;
+	static Uint32 m_mouseCurr;
+	static Uint32 m_mouseLast;
+	SDL_Cursor* m_cursor;
 
 private: // private method prototypes.
 	Engine() {} //Prevents instantiantion outside class
@@ -247,6 +305,11 @@ public: // public method prototypes.
 	bool KeyDown(SDL_Scancode c);
 	static Engine& Instance(); //Static methoid for object access
 	SDL_Renderer* GetRenderer() { return m_pRenderer; }
+
+	static bool MousePressed(const int b);
+
+	static SDL_Point& GetMousePos();
+	
 };
 
 #endif
