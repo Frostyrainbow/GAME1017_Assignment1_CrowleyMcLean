@@ -119,6 +119,8 @@ int Engine::Init(const char* title, int xPos, int yPos, int width, int height, i
 					m_pResumeButtonTexture = IMG_LoadTexture(m_pRenderer, "Img/ResumeButton.png");
 					m_pMenuButtonTexture = IMG_LoadTexture(m_pRenderer, "Img/MenuButton.png");
 					m_pStartButtonTexture = IMG_LoadTexture(m_pRenderer, "Img/StartButton.png");
+					m_pMenuBackgroundTexture = IMG_LoadTexture(m_pRenderer, "Img/Title.png");
+					m_pGameOverBackgroundTexture = IMG_LoadTexture(m_pRenderer, "Img/Gameover.png");
 					
 				}
 				else
@@ -157,6 +159,8 @@ int Engine::Init(const char* title, int xPos, int yPos, int width, int height, i
 	m_pResumeButton.SetRekts({ 0,0,189,58 }, { 420, 300, 189, 58 });
 	m_pMenuButton.SetRekts({ 0,0,189,58 }, { 420, 200, 189, 58 });
 	m_pStartButton.SetRekts({ 0,0,189,58 }, { 420, 400, 189, 58 });
+	m_pMenuBackground.SetRekts({ 0, 0, WIDTH, HEIGHT }, { 0, 0, WIDTH, HEIGHT });
+	m_pGameOverBackground.SetRekts({ 0, 0, WIDTH, HEIGHT }, { 0, 0, WIDTH, HEIGHT });
 	m_bg1.SetRekts( {0, 0, WIDTH, HEIGHT}, {0, 0, WIDTH, HEIGHT} );
 	m_bg2.SetRekts( {0, 0, WIDTH, HEIGHT}, {0, -HEIGHT, WIDTH, HEIGHT} );
 	for (int i = 0; i < m_bullets.size(); i++)

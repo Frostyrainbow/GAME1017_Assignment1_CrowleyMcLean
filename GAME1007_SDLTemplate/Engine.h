@@ -258,9 +258,11 @@ public: // private properties.
 	SDL_Texture* m_pResumeButtonTexture; // Resume button
 	SDL_Texture* m_pMenuButtonTexture; //Main Menu button in End State
 	SDL_Texture* m_pStartButtonTexture; //Start Button in Title
+	SDL_Texture* m_pMenuBackgroundTexture; //Background for the title
+	SDL_Texture* m_pGameOverBackgroundTexture; //Background for the title
 
 	Sprite* m_player;
-	Sprite m_bg1, m_bg2;
+	Sprite m_bg1, m_bg2, m_pMenuBackground, m_pGameOverBackground;
 	int m_speed = 5;
 	int m_e_spawnTimer = 180;
 	int m_r_spawnTimer = 260;

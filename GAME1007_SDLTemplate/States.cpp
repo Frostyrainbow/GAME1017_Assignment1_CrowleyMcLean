@@ -35,6 +35,7 @@ void TitleState::Render()
 	
 	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 0, 255, 255);
 	SDL_RenderClear(Engine::Instance().GetRenderer());
+	SDL_RenderCopy(Engine::Instance().m_pRenderer, Engine::Instance().m_pMenuBackgroundTexture, Engine::Instance().m_pMenuBackground.GetSrc(), Engine::Instance().m_pMenuBackground.GetDst());
 	SDL_RenderCopy(Engine::Instance().m_pRenderer, Engine::Instance().m_pStartButtonTexture, Engine::Instance().m_pStartButton.GetSrc(), Engine::Instance().m_pStartButton.GetDst());
 	State::Render();
 }
@@ -55,7 +56,7 @@ void GameState::Enter()
 {
 	
 	Mix_PlayMusic(Engine::Instance().m_theme, -1); // 0-n for #number of loops, or -1 for infinite looping
-	Mix_VolumeMusic(2); //0-128
+	Mix_VolumeMusic(16); //0-128
 	Mix_VolumeChunk(Engine::Instance().m_e_plane_fire, 8);
 	Mix_VolumeChunk(Engine::Instance().m_p_tank_fire, 8);
 	Mix_VolumeChunk(Engine::Instance().m_death, 13);
@@ -296,7 +297,7 @@ void GameState::Render()
 	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 0, 128, 255, 255);
 	SDL_RenderClear(Engine::Instance().m_pRenderer);
 	//Any drawing here...
-	SDL_RenderCopy(Engine::Instance().m_pRenderer, Engine::Instance().m_pBGTexture, Engine::Instance().m_bg1.GetSrc(), Engine::Instance().m_bg1.GetDst());
+	SDL_RenderCopy(Engine::Instance().m_pRenderer, Engine::Instance().m_pBGTexture, Engine::Instance().m_bg1.GetSrc(), Engine::Instance().m_bg1.GetDst()); 
 	SDL_RenderCopy(Engine::Instance().m_pRenderer, Engine::Instance().m_pBGTexture, Engine::Instance().m_bg2.GetSrc(), Engine::Instance().m_bg2.GetDst());
 	SDL_RenderCopyEx(Engine::Instance().m_pRenderer, Engine::Instance().m_pTexture, Engine::Instance().m_player->GetSrc(), Engine::Instance().m_player->GetDst(), 180.0, NULL, SDL_FLIP_NONE);
 	for (int i = 0; i < Engine::Instance().m_bullets.size(); i++)
@@ -392,6 +393,7 @@ void EndState::Render()
 {
 	SDL_SetRenderDrawColor(Engine::Instance().GetRenderer(), 255, 255, 255, 255);
 	SDL_RenderClear(Engine::Instance().GetRenderer());
+	SDL_RenderCopy(Engine::Instance().m_pRenderer, Engine::Instance().m_pGameOverBackgroundTexture, Engine::Instance().m_pGameOverBackground.GetSrc(), Engine::Instance().m_pGameOverBackground.GetDst());
 	SDL_RenderCopy(Engine::Instance().m_pRenderer, Engine::Instance().m_pMenuButtonTexture, Engine::Instance().m_pMenuButton.GetSrc(), Engine::Instance().m_pMenuButton.GetDst());
 	State::Render();
 	
