@@ -42,9 +42,7 @@ void StateManager::ChangeState(State* pState)
 	}
 	pState->Enter();
 	s_states.push_back(pState);
-	/* or, this may be a little more elegant:
-	s_states.push_back(pState);
-	s_states.back()->Enter(); */
+	
 }
 
 void StateManager::Quit()

@@ -292,7 +292,6 @@ public: // private properties.
 
 private: // private method prototypes.
 	Engine() {} //Prevents instantiantion outside class
-	//~Engine() = delete; //Prevents destruction through pointer.
 	int Init(const char* title, int xPos, int yPos, int width, int height, int flags);
 	void Clean();
 	void Wake();

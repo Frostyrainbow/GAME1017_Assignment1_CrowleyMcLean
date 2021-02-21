@@ -304,7 +304,7 @@ void GameState::Render()
 	for (int i = 0; i < Engine::Instance().m_bullets.size(); i++)
 	{
 		Engine::Instance().m_bullets[i]->Render(Engine::Instance().m_pRenderer, Engine::Instance().m_pShellTexture);
-		//SDL_RenderCopy(m_pRenderer, m_pShellTexture, m_bullets[i]->GetDst(), m_bullets[i]->GetSrc());
+		
 	}
 	for (int i = 0; i < Engine::Instance().m_rocks.size(); i++)
 	{
